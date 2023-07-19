@@ -53,8 +53,6 @@ export default function Home() {
     setSelectedRecipes([]);
   };
 
-  console.log(recipes, page);
-
   return recipes.length ? (
     <SC.Home>
       <Button type="refresh" actionHandler={() => refreshRecipesList()}>
