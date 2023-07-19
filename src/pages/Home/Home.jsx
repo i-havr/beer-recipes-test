@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BeersList } from "../../components/BeersList";
 import { Button } from "../../components/Button";
 import { getBeers } from "../../services/BeerApi";
-import { useRecipes } from "../../store";
+import { useRecipes, usePages } from "../../store";
 
 import * as SC from "./Home.styled";
 
@@ -14,8 +14,8 @@ export default function Home() {
   const addRecipes = useRecipes((state) => state.addRecipes);
   const refreshRecipes = useRecipes((state) => state.refreshRecipes);
   const deleteRecipes = useRecipes((state) => state.deleteRecipes);
-  const page = useRecipes((state) => state.page);
-  const updatePage = useRecipes((state) => state.updatePage);
+  const page = usePages((state) => state.page);
+  const updatePage = usePages((state) => state.updatePage);
 
   useEffect(() => {
     if (isFirstRender) {

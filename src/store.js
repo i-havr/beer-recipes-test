@@ -6,7 +6,6 @@ export const useRecipes = create(
   persist(
     (set) => ({
       recipes: [],
-      page: 1,
       addRecipes: (newRecipes) =>
         set((state) => {
           return { recipes: [...state.recipes, ...newRecipes] };
@@ -21,11 +20,20 @@ export const useRecipes = create(
             recipes: removeFromArray(state.recipes, recipesForDeleting),
           };
         }),
+    }),
+    { name: "recipes", storage: createJSONStorage(() => localStorage) }
+  )
+);
+
+export const usePages = create(
+  persist(
+    (set) => ({
+      page: 1,
       updatePage: (newPage = 1) =>
         set(() => {
           return { page: newPage };
         }),
     }),
-    { name: "recipes", storage: createJSONStorage(() => localStorage) }
+    { name: "page", storage: createJSONStorage(() => localStorage) }
   )
 );
