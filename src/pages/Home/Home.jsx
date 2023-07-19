@@ -10,10 +10,8 @@ export default function Home() {
   const [selectedRecipes, setSelectedRecipes] = useState([]);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const { recipes, addRecipes, refreshRecipes, deleteRecipes } = useRecipes(
-    (state) => state
-  );
-  const { page, updatePage } = usePages((state) => state);
+  const { recipes, addRecipes, refreshRecipes, deleteRecipes } = useRecipes();
+  const { page, updatePage } = usePages();
 
   useEffect(() => {
     if (isFirstRender) {
