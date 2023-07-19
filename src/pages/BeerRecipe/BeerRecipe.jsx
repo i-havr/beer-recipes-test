@@ -1,4 +1,4 @@
-import { Outlet, useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useRecipes } from "../../store";
 
 import * as SC from "./BeerRecipe.styled";

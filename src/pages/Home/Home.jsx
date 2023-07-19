@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { BeersList } from "../../components/BeersList/BeersList2";
+import { useState, useEffect } from "react";
+import { BeersList } from "../../components/BeersList";
 import { Button } from "../../components/Button";
 import { getBeers } from "../../services/BeerApi";
 import { useRecipes } from "../../store";
@@ -7,93 +7,15 @@ import { useRecipes } from "../../store";
 import * as SC from "./Home.styled";
 
 export default function Home() {
-  const recipes = useRecipes((state) => state.recipes);
-
-  const [page, setPage] = useState(1);
-  const [renderedRecipes, setRenderedRecipes] = useState(recipes.slice(0, 15));
   const [selectedRecipes, setSelectedRecipes] = useState([]);
-  const [iteration, setIteration] = useState(1);
-  const [activeBlockIndex, setActiveBlockIndex] = useState(0);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
+  const recipes = useRecipes((state) => state.recipes);
   const addRecipes = useRecipes((state) => state.addRecipes);
   const refreshRecipes = useRecipes((state) => state.refreshRecipes);
   const deleteRecipes = useRecipes((state) => state.deleteRecipes);
-
-  // const getBeersList = useCallback(
-  //   async (page) => {
-  //     try {
-  //       const data = await getBeers(page);
-  //       addRecipes(data);
-  //       setPage((prev) => prev + 1);
-
-  //       return data;
-  //     } catch (error) {
-  //       console.log("Whoops, something went wrong ", error.message);
-  //       return;
-  //     }
-  //   },
-  //   [addRecipes]
-  // );
-
-  const getBeersList = useCallback(async (page) => {
-    try {
-      const data = await getBeers(page);
-      // addRecipes(data);
-      setPage((prev) => prev + 1);
-
-      return;
-    } catch (error) {
-      console.log("Whoops, something went wrong ", error.message);
-      return;
-    }
-  }, []);
-
-  const del = useCallback(() => {
-    if (iteration === 3) {
-      // setIteration(1);
-      deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-      console.log("recipes", recipes);
-      setRenderedRecipes(recipes.slice(0, 15));
-      // return;
-    }
-  }, [deleteRecipes, iteration, recipes]);
-
-  useEffect(() => {
-    const cardsObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveBlockIndex(+entry.target.id);
-            setIteration(+entry.target.id + 1);
-
-            console.log("iteration", iteration);
-            del();
-            // if (iteration === 3) {
-            // observer.disconnect();
-            // deleteRecipes(recipes.slice(0, 5).map((recipe) => recipe.id));
-            // console.log("recipes", recipes);
-            // setRenderedRecipes(recipes.slice(0, 15));
-            // setIteration(1);
-            // console.log("page", page);
-            // entries[0].target.style.display = "none";
-            // observer.unobserve(entry.target);
-            // observer.unobserve(entries[1].target);
-            // setRenderedRecipes(recipes.slice(5, 20));
-            // setRenderedRecipes((prev) => [...prev, ...recipes.slice(15, 20)]);
-            // }
-          }
-        });
-      },
-      { root: null, rootMargin: "-100px", threshold: 0.5 }
-    );
-
-    document
-      .querySelectorAll(".block")
-      .forEach((block) => cardsObserver.observe(block));
-
-    return () => cardsObserver.disconnect();
-  }, [del, deleteRecipes, iteration, recipes]);
+  const page = useRecipes((state) => state.page);
+  const updatePage = useRecipes((state) => state.updatePage);
 
   useEffect(() => {
     if (isFirstRender) {
@@ -101,8 +23,18 @@ export default function Home() {
       return;
     }
 
-    recipes.length < 15 && getBeersList(page);
-  }, [getBeersList, isFirstRender, page, recipes.length]);
+    const getBeersList = async () => {
+      try {
+        const data = await getBeers(page);
+        addRecipes(data);
+        updatePage(page + 1);
+      } catch (error) {
+        console.log("Whoops, something went wrong ", error.message);
+      }
+    };
+
+    recipes.length < 15 && getBeersList();
+  }, [addRecipes, isFirstRender, page, recipes.length, updatePage]);
 
   const isSelected = (id) => selectedRecipes.includes(id);
 
@@ -114,12 +46,10 @@ export default function Home() {
       : setSelectedRecipes((prev) => [...prev, id]);
   };
 
-  // console.log(page);
-
   const refreshRecipesList = () => {
     refreshRecipes();
     setSelectedRecipes([]);
-    setPage(1);
+    updatePage();
   };
 
   const handleDeleteSelected = () => {
@@ -137,12 +67,9 @@ export default function Home() {
       ) : null}
 
       <SC.Container>
-        <h2>LEFT click to open, RIGHT click to select, SCROLL to get more</h2>
+        <h2>LEFT click to open, RIGHT click to select</h2>
         <BeersList
-          // beers={recipes.slice(0, 15)}
-          // beers={renderedRecipes.slice(0, 15)}
-          beers={renderedRecipes}
-          activeBlockIndex={activeBlockIndex}
+          beers={recipes.slice(0, 15)}
           onSelectRecipe={toggleSelecting}
           selectedRecipes={selectedRecipes}
         />

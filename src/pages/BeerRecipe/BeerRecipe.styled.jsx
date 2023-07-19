@@ -57,14 +57,12 @@ export const ImageContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   margin: 48px 0;
-  /* background-color: black; */
 `;
 
 export const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: flex-start; */
   padding: 0 100px;
 `;
 
@@ -136,11 +134,9 @@ export const TextIngredientsValue = styled.p`
 export const FermentationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* padding: 64px 0; */
 `;
 
 export const MashingWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  /* padding: 64px 0; */
 `;

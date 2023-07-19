@@ -99,9 +99,6 @@ export const BrewersTips = styled.p`
 `;
 
 export const Image = styled.img`
-  /* position: absolute; */
-  /* right: 32px; */
-  /* bottom: 24px; */
   width: 50px;
   transition: scale 200ms ease-out, rotate 200ms ease-out;
 `;
@@ -119,5 +116,4 @@ export const AlcoholContent = styled.p`
 
 export const LinkStyled = styled(Link)`
   text-decoration: none;
-  /* margin: -10px; */
 `;

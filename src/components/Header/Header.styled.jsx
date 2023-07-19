@@ -47,7 +47,6 @@ export const HeaderContent = styled.div`
 export const LinkStyled = styled(Link)`
   display: flex;
   align-items: center;
-  /* margin: 0; */
   color: rgba(255, 255, 255, 0.87);
   font-size: 20px;
   text-decoration: none;
