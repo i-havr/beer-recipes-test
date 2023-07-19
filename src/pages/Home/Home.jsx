@@ -10,12 +10,10 @@ export default function Home() {
   const [selectedRecipes, setSelectedRecipes] = useState([]);
   const [isFirstRender, setIsFirstRender] = useState(true);
 
-  const recipes = useRecipes((state) => state.recipes);
-  const addRecipes = useRecipes((state) => state.addRecipes);
-  const refreshRecipes = useRecipes((state) => state.refreshRecipes);
-  const deleteRecipes = useRecipes((state) => state.deleteRecipes);
-  const page = usePages((state) => state.page);
-  const updatePage = usePages((state) => state.updatePage);
+  const { recipes, addRecipes, refreshRecipes, deleteRecipes } = useRecipes(
+    (state) => state
+  );
+  const { page, updatePage } = usePages((state) => state);
 
   useEffect(() => {
     if (isFirstRender) {
@@ -36,12 +34,10 @@ export default function Home() {
     recipes.length < 15 && getBeersList();
   }, [addRecipes, isFirstRender, page, recipes.length, updatePage]);
 
-  const isSelected = (id) => selectedRecipes.includes(id);
-
   const toggleSelecting = (event, id) => {
     event.preventDefault();
 
-    isSelected(id)
+    selectedRecipes.includes(id)
       ? setSelectedRecipes((prev) => prev.filter((el) => el !== id))
       : setSelectedRecipes((prev) => [...prev, id]);
   };
@@ -56,6 +52,8 @@ export default function Home() {
     deleteRecipes(selectedRecipes);
     setSelectedRecipes([]);
   };
+
+  console.log(recipes, page);
 
   return recipes.length ? (
     <SC.Home>
